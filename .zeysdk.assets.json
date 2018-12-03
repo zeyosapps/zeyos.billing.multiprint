@@ -1,0 +1,37 @@
+{
+  "services": {
+    "api": {
+      "name": "Multi-print API",
+      "type": "remotecall",
+      "entity": "",
+      "schedule": 0,
+      "interval": 1,
+      "url": "",
+      "mimetype": "application/ixml+xml"
+    }
+  },
+  "resources": {
+    "controller": {
+      "name": "JavaScript Controller",
+      "mimetype": "application/javascript"
+    },
+    "html": {
+      "name": "HTML Frame",
+      "mimetype": "application/ixml+xml"
+    }
+  },
+  "weblets": {
+    "billing": {
+      "name": "Print PDFs",
+      "view": "billing.index",
+      "type": "popup_plain",
+      "width": 400,
+      "height": 170,
+      "url": "",
+      "svgpath": "",
+      "color": "",
+      "mimetype": "application/ixml+xml",
+      "langaliases": null
+    }
+  }
+}

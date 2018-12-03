@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ixml SYSTEM "http://www.ixmldev.com/schema/ixml.dtd">
+<ixml>
+
+<session var="session" />
+
+<array var="params">
+	<item key="default">en_US</item>
+	<array key="accepted">
+		<item>en_US</item>
+		<item>de_DE</item>
+		<item>es_ES</item>
+	</array>
+	<array key="load">
+		<item>net.zeyon.lang.common-1000</item>
+		<item>$SELFNS</item>
+	</array>
+</array>
+<include id="net.zeyon.lib.locale-1000.loader" var_params="params" />
+
+<array var="params">
+	<array key="includeCss">
+		<item>https://cdn.jsdelivr.net/gh/zeyosinc/gx-zeyos@3.0/dist/gx-zeyos.css</item>
+	</array>
+	<array key="includeJs">
+		<item>https://cdn.jsdelivr.net/gh/zeyosinc/gx-mootools@1.4/mootools-core-1.4.5-full-nocompat-yc.js</item>
+		<item>https://cdn.jsdelivr.net/gh/zeyosinc/gx-mootools@1.4/mootools-more-1.4.0.1-nocompat-yc.js</item>
+		<item>https://cdn.jsdelivr.net/gh/zeyosinc/gx-core@1.0/dist/gx-core.min.js</item>
+		<item>https://cdn.jsdelivr.net/gh/zeyosinc/gx-zeyos@3.0/dist/gx-zeyos.min.js</item>
+		<item>$PATH_EXTERN$api.js</item> <!-- ZeyOS API -->
+	</array>
+	<item key="css">
+		body { overflow: hidden; }
+		.alert-warning, .alert-danger {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+		.alert-warning {
+			color: #8a6d3b;
+			background-color: #fcf8e3;
+			border-color: #faebcc;
+		}
+		.alert-danger {
+			color: #a94442;
+			background-color: #f2dede;
+			border-color: #ebccd1;
+		}
+		#table {
+			height: 70px;
+			padding: 10px;
+		}
+	</item>
+	<array key="js">
+		<item>
+		var ID = '$REQUEST.id';
+		var SELFNS = '$SELFNS';
+		</item>
+		<item>
+			<include id=".controller" />
+		</item>
+		<item>
+			<include id="net.zeyon.lib.locale-1000.js" />
+		</item>
+	</array>
+	<item key="content"><![CDATA[
+		<section class="popbody m-5 p_b-10">
+			<div class="bg-F p-10 fs-18 br_t-5">Print transactions</div>
+			<div id="table" class="b_t"></div>
+			<div class="mi_t-10 b_t-1">
+				<form action="../remotecall/$SELFNS$.api/transactions.zip" method="post" id="frm" target="_blank">
+					<input type="hidden" id="hdnSelection" name="selection" />
+					<button id="btnSubmit" class="fl-r em m_l-10 fb" type="submit" disabled="disabled">$L(action.ok)</button>
+					<button id="btnClose" class="fl-r" type="button">$L(action.close)</button>
+					<div class="clr"></div>
+				</form>
+			</div>
+		</section>
+	]]></item>
+</array>
+
+<include id="net.zeyon.lib.html.template-1020.html" />
+<new class="Html.Boilerplate" var="page" var_params="params" />
+<output>$page.compile()</output>
+
+</ixml>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ixml SYSTEM "http://www.ixmldev.com/schema/ixml.dtd">
+<ixml>
+
+<try>
+	<global var="session" />
+	<session var="session" />
+	
+	<global var="RES" />
+	<global var="silent" />
+	<set var="RES.result">0</set>
+	
+	<if value1="$session.ID">
+		<error>You are not authorized</error>
+	</if>
+	
+	<split delimiter="," var="selection">$REQUEST.selection</split>
+	<db:select var_result="transactions" type="assoc">
+		<db:fields>
+			<db:field>ID</db:field>
+			<db:field>transactionnum</db:field>
+		</db:fields>
+		<db:table>transactions</db:table>
+		<db:in field="ID" var="selection" />
+	</db:select>
+	
+	<if value1="$transactions[0][ID]">
+		<error>No transactions selected</error>
+	</if>
+	
+	<temp:write var="tempId">1</temp:write>
+	<temp:path var="tempPath" id="$tempId" />
+	<temp:write id="$tempId"></temp:write>
+	<zip:archive filename="$tempPath">
+		<foreach var="transactions" var_value="trans">
+			<extdata:get entity="transactions" id="$trans.ID" var="data" />
+			<set var="data.token">$APPSETTINGS.token</set>
+			<zip:write filename="$trans.transactionnum$.pdf">
+				<http:request method="POST" url="$APPSETTINGS.printurl$/$trans.ID/$trans.transactionnum$.pdf" var="pdf">
+					<http:body>
+						<http:query var="data" />
+					</http:body>
+				</http:request>
+			</zip:write>
+		</foreach>
+	</zip:archive>
+	
+	<header>Content-type: application/zip</header>
+	<output>
+		<temp:read id="$tempId" />
+	</output>
+	
+	<exit />
+<catch var="error">
+	<header>HTTP/1.1 200 OK</header>
+	<header>Status: 200</header>
+	<array var="RES">
+		<item key="error">$error</item>
+	</array>
+</catch>
+</try>
+
+<header>Content-type: application/json; charset=UTF-8</header>
+<output>
+	<encode:json var="RES" />
+</output>
+
+</ixml>
